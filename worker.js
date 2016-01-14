@@ -1,7 +1,7 @@
 var path = require('path');
 var util = require('util');
 
-var job = require('./lib/job');
+var entry = require('./lib/entry');
 
 module.exports = {
   init: function (config, job, context, callback) {
@@ -26,7 +26,7 @@ module.exports = {
           };
         }
 
-        job.recursivelyPrepare(opts, done);
+        entry.recursivelyPrepare(opts, done);
       }
     });
   }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var logging = require('./lib/logger');
-var job = require('./lib/job');
+var entry = require('./lib/entry');
 
 var opts = {
   root: ".",
@@ -9,7 +9,7 @@ var opts = {
   whisper: logging.whisper
 };
 
-job.recursivelyPrepare(opts, function (err) {
+entry.recursivelyPrepare(opts, function (err) {
   if (err) {
     logging.logger.error("Preparation unsuccessful.", err);
 
