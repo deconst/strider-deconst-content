@@ -22,6 +22,8 @@ module.exports = {
 
         var opts = {
           root: context.dataDir,
+          contentServiceURL: config.contentServiceURL,
+          contentServiceAPIKey: config.contentServiceAPIKey,
           say: write,
           whisper: function () {}
         };
