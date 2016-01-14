@@ -6,6 +6,10 @@ module.exports = {
     contentServiceAPIKey: {
       type: String
     },
+    contentServiceTLSVerify: {
+      type: Boolean,
+      default: true
+    },
     verbose: {
       type: Boolean,
       default: false

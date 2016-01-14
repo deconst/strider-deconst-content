@@ -15,9 +15,23 @@
   </p>
   <input type="password" id="content-service-apikey" ng-model="config.contentServiceAPIKey" ng-blur="save()">
 
-  <label for="verbose" class="bold-label">Verbose</label>
+  <label class="bold-label inline-label">
+    <input type="checkbox" class="inline-checkbox" ng-model="config.verbose" ng-change="save()"> Verbose
+  </label>
   <p class="help-text">
-    <input type="checkbox" id="verbose" ng-model="config.verbose" ng-change="save()">
     Emit verbose logging messages during content preparation.
+  </p>
+
+  <label class="bold-label inline-label">
+    <input type="checkbox" class="inline-checkbox" ng-model="config.contentServiceTLSVerify" ng-change="save()"> Verify TLS Connections
+  </label>
+  <p class="help-text">
+    Enable TLS verification for connections to the content service.
+    <span class="danger">
+      <i class="fa fa-exclamation-triangle"></i>
+      Danger: this setting impacts the security of your communications with the Deconst cluster and
+      risks leaking your API key. Only disable this setting in non-production environments.
+      <i class="fa fa-exclamation-triangle"></i>
+    </span>
   </p>
 </div>
