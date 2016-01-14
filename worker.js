@@ -10,20 +10,24 @@ module.exports = {
       path: [],
 
       deploy: function (context, done) {
+        var write = function () {
+          var text = util.format.apply(null, arguments);
+
+          if (text.substr(-1) !== '\n') {
+            text += '\n';
+          }
+
+          context.out(text);
+        };
+
         var opts = {
           root: context.dataDir,
-          say: function () {
-            var text = util.format.apply(null, arguments);
-            context.striderMessage(text);
-          },
+          say: write,
           whisper: function () {}
         };
 
         if (config.verbose) {
-          opts.whisper = function () {
-            var text = util.format.apply(null, arguments);
-            context.striderMessage(">> " + text);
-          };
+          opts.whisper = write;
         }
 
         entry.recursivelyPrepare(opts, done);
