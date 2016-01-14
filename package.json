@@ -33,9 +33,6 @@
     "title": "Deconst Content",
     "webapp": "webapp.js",
     "worker": "worker.js",
-    "icon": "icon.png",
-    "config": {
-      "controller": "DeconstContentController"
-    }
+    "icon": "icon.png"
   }
 }
