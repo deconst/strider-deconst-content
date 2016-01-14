@@ -7,13 +7,13 @@
   <p class="help-text">
     Base URL of the content service endpoint for this Deconst cluster.
   </p>
-  <input type="text" id="content-service-url" ng-model="config.contentServiceURL" ng-change="save()" placeholder="https://...:9000/">
+  <input type="text" id="content-service-url" ng-model="config.contentServiceURL" ng-blur="save()" placeholder="https://...:9000/">
 
   <label for="content-service-apikey" class="bold-label">Content Service API Key</label>
   <p class="help-text">
     API key issued by the content service.
   </p>
-  <input type="password" id="content-service-apikey" ng-model="config.contentServiceAPIKey" ng-change="save()">
+  <input type="password" id="content-service-apikey" ng-model="config.contentServiceAPIKey" ng-blur="save()">
 
   <label for="verbose" class="bold-label">Verbose</label>
   <p class="help-text">
