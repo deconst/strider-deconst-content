@@ -1,14 +1,23 @@
 <h2>
   Deconst Content Repository
-  <button ng-click="save()" class="btn btn-primary pull-right">Save</button>
 </h2>
 
 <div class="form-group">
+  <label for="content-service-url" class="bold-label">Content Service URL</label>
+  <p class="help-text">
+    Base URL of the content service endpoint for this Deconst cluster.
+  </p>
+  <input type="text" id="content-service-url" ng-model="config.contentServiceURL" ng-change="save()" placeholder="https://...:9000/">
+
+  <label for="content-service-apikey" class="bold-label">Content Service API Key</label>
+  <p class="help-text">
+    API key issued by the content service.
+  </p>
+  <input type="password" id="content-service-apikey" ng-model="config.contentServiceAPIKey" ng-change="save()">
+
   <label for="verbose" class="bold-label">Verbose</label>
   <p class="help-text">
     <input type="checkbox" id="verbose" ng-model="config.verbose" ng-change="save()">
     Emit verbose logging messages during content preparation.
   </p>
 </div>
-
-<button ng-click="save()" class="btn btn-primary pull-right">Save</button>
