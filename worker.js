@@ -24,6 +24,7 @@ module.exports = {
           root: context.dataDir,
           contentServiceURL: config.contentServiceURL,
           contentServiceAPIKey: config.contentServiceAPIKey,
+          contentServiceTLSVerify: config.contentServiceTLSVerify,
           say: write,
           whisper: function () {}
         };
