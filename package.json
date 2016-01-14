@@ -1,0 +1,41 @@
+{
+  "name": "strider-deconst-content",
+  "version": "1.0.0",
+  "description": "Universal Deconst content service build for Strider CD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deconst/strider-deconst-content"
+  },
+  "keywords": [
+    "strider",
+    "deconst",
+    "content-repository"
+  ],
+  "bin": {
+    "deconst-content-build": "./bin.js"
+  },
+  "author": "Ash Wilson <smashwilson@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^1.5.2",
+    "dockerode": "^2.2.8",
+    "request": "^2.67.0",
+    "walk": "^2.3.9",
+    "winston": "^2.1.1"
+  },
+  "strider": {
+    "id": "deconst-content",
+    "type": "job",
+    "title": "Deconst Content",
+    "webapp": "webapp.js",
+    "worker": "worker.js",
+    "icon": "icon.png",
+    "config": {
+      "controller": "DeconstContentController"
+    }
+  }
+}

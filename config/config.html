@@ -1,0 +1,14 @@
+<h2>
+  Deconst Content Repository
+  <button ng-click="save()" class="btn btn-primary pull-right">Save</button>
+</h2>
+
+<div class="form-group">
+  <label for="verbose" class="bold-label">Verbose</label>
+  <input type="checkbox" id="verbose" ng-model="config.verbose" ng-change="save()">
+  <p class="help-text">
+    Emit verbose logging messages during content preparation.
+  </p>
+</div>
+
+<button ng-click="save()" class="btn btn-primary pull-right">Save</button>
