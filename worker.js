@@ -22,6 +22,7 @@ module.exports = {
 
         var opts = {
           root: context.dataDir,
+          dataContainer: process.env.STRIDER_WORKSPACE_CONTAINER,
           contentServiceURL: config.contentServiceURL,
           contentServiceAPIKey: config.contentServiceAPIKey,
           contentServiceTLSVerify: config.contentServiceTLSVerify,
