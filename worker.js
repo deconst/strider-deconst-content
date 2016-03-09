@@ -7,6 +7,8 @@ module.exports = {
   init: function (config, job, context, callback) {
     var isPullRequest = job.trigger.type === 'pull-request';
 
+    console.log(require('util').inspect(job, { depth: null }));
+
     callback(null, {
       env: {},
       path: [],
