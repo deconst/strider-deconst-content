@@ -17,7 +17,7 @@ module.exports = {
         if (isPullRequest) {
           var opts = assembleOptions(config, context, job.trigger.url);
 
-          done(null, true);
+          entry.preparePullRequest(opts, done);
         } else {
           done(null, false);
         }
