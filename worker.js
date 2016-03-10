@@ -7,8 +7,6 @@ module.exports = {
   init: function (config, job, context, callback) {
     var isPullRequest = job.trigger.type === 'pull-request';
 
-    console.log(require('util').inspect(job, { depth: null }));
-
     callback(null, {
       env: {},
       path: [],
@@ -16,6 +14,8 @@ module.exports = {
       test: function (context, done) {
         if (isPullRequest) {
           var opts = assembleOptions(config, context, job.trigger.url);
+
+          opts.whisper('Testing pull request [%s].', opts.pullRequestURL);
 
           entry.preparePullRequest(opts, done);
         } else {
