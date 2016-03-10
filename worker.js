@@ -54,7 +54,7 @@ var assembleOptions = function (config, context, pullRequestURL) {
     contentServiceURL: config.contentServiceURL,
     contentServiceAPIKey: config.contentServiceAPIKey,
     contentServiceTLSVerify: config.contentServiceTLSVerify,
-    stagingContextServiceURL: config.stagingContentServiceURL,
+    stagingContentServiceURL: config.stagingContentServiceURL,
     stagingContentServiceAdminAPIKey: config.stagingContentServiceAdminAPIKey,
     say: write,
     whisper: function () {}
