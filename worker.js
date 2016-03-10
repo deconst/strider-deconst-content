@@ -13,7 +13,10 @@ module.exports = {
 
       test: function (context, done) {
         if (isPullRequest) {
-          var opts = assembleOptions(config, context, job.trigger.url);
+          var opts = assembleOptions(config, context);
+
+          opts.pullRequestURL = job.trigger.url;
+          opts.user = job.creator;
 
           opts.whisper('Testing pull request [%s].', opts.pullRequestURL);
 
@@ -44,16 +47,16 @@ var makeWriter = function (context) {
   };
 };
 
-var assembleOptions = function (config, context, pullRequestURL) {
+var assembleOptions = function (config, context) {
   var write = makeWriter(context);
 
   var opts = {
     root: context.dataDir,
     dataContainer: process.env.STRIDER_WORKSPACE_CONTAINER,
-    pullRequestURL: pullRequestURL,
     contentServiceURL: config.contentServiceURL,
     contentServiceAPIKey: config.contentServiceAPIKey,
     contentServiceTLSVerify: config.contentServiceTLSVerify,
+    stagingPresenterURL: config.stagingPresenterURL,
     stagingContentServiceURL: config.stagingContentServiceURL,
     stagingContentServiceAdminAPIKey: config.stagingContentServiceAdminAPIKey,
     say: write,
