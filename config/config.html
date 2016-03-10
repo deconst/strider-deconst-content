@@ -15,6 +15,12 @@
   </p>
   <input type="password" id="content-service-apikey" ng-model="config.contentServiceAPIKey" ng-blur="save()">
 
+  <label for="staging-presenter-url" class="bold-label">Staging URL</label>
+  <p class="help-text">
+    Base URL of the staging presenter for this Deconst cluster.
+  </p>
+  <input type="text" id="staging-presenter-url" ng-model="config.stagingPresenterURL" ng-blur="save()" placeholder="https://staging.../">
+
   <label for="staging-content-service-url" class="bold-label">Staging Content Service URL</label>
   <p class="help-text">
     Base URL of the staging content service endpoint for this Deconst cluster.
