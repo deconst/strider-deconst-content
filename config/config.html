@@ -15,6 +15,24 @@
   </p>
   <input type="password" id="content-service-apikey" ng-model="config.contentServiceAPIKey" ng-blur="save()">
 
+  <label for="staging-presenter-url" class="bold-label">Staging URL</label>
+  <p class="help-text">
+    Base URL of the staging presenter for this Deconst cluster.
+  </p>
+  <input type="text" id="staging-presenter-url" ng-model="config.stagingPresenterURL" ng-blur="save()" placeholder="https://staging.../">
+
+  <label for="staging-content-service-url" class="bold-label">Staging Content Service URL</label>
+  <p class="help-text">
+    Base URL of the staging content service endpoint for this Deconst cluster.
+  </p>
+  <input type="text" id="staging-content-service-url" ng-model="config.stagingContentServiceURL" ng-blur="save()" placeholder="https://content.staging.../">
+
+  <label for="staging-content-service-apikey" class="bold-label">Staging Content Service API Key</label>
+  <p class="help-text">
+    Admin API key that can be used to issue temporary API keys for the staging content service.
+  </p>
+  <input type="password" id="staging-content-service-apikey" ng-model="config.stagingContentServiceAdminAPIKey" ng-blur="save()">
+
   <label class="bold-label inline-label">
     <input type="checkbox" class="inline-checkbox" ng-model="config.verbose" ng-change="save()"> Verbose
   </label>
