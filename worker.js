@@ -23,7 +23,9 @@ module.exports = {
           opts.whisper('Testing pull request [%s].', opts.pullRequestURL);
 
           entry.preparePullRequest(opts, function (err, results) {
-            done(err, results.didSomething);
+            if (err) return done(err);
+
+            done(null, results.didSomething);
           });
         } else {
           done(null, false);
@@ -34,7 +36,9 @@ module.exports = {
         var opts = assembleOptions(config, context);
 
         entry.recursivelyPrepare(opts, function (err, results) {
-          done(err, results.didSomething);
+          if (err) return done(err);
+
+          done(null, results.didSomething);
         });
       }
     });
