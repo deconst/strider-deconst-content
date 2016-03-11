@@ -18,8 +18,6 @@ module.exports = {
           opts.pullRequestURL = job.trigger.url;
           opts.user = job.project.creator;
 
-          console.log(require('util').inspect(job, { depth: null }));
-
           opts.whisper('Testing pull request [%s].', opts.pullRequestURL);
 
           entry.preparePullRequest(opts, function (err, results) {
