@@ -22,7 +22,9 @@ module.exports = {
 
           opts.whisper('Testing pull request [%s].', opts.pullRequestURL);
 
-          entry.preparePullRequest(opts, done);
+          entry.preparePullRequest(opts, function (err, results) {
+            done(err, results.didSomething);
+          });
         } else {
           done(null, false);
         }
