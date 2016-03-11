@@ -31,7 +31,9 @@ module.exports = {
       deploy: function (context, done) {
         var opts = assembleOptions(config, context);
 
-        entry.recursivelyPrepare(opts, done);
+        entry.recursivelyPrepare(opts, function (err, results) {
+          done(err, results.didSomething);
+        });
       }
     });
   }
