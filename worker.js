@@ -21,7 +21,10 @@ module.exports = {
           opts.whisper('Testing pull request [%s].', opts.pullRequestURL);
 
           entry.preparePullRequest(opts, function (err, results) {
-            if (err) return done(err);
+            if (err) {
+              err.type = 'exitCode';
+              err.code = 1;
+            }
 
             done(null, results.didSomething);
           });
@@ -34,9 +37,12 @@ module.exports = {
         var opts = assembleOptions(config, context);
 
         entry.recursivelyPrepare(opts, function (err, results) {
-          if (err) return done(err);
+          if (err) {
+            err.type = 'exitCode';
+            err.code = 1;
+          }
 
-          done(null, results.didSomething);
+          done(err, results.didSomething);
         });
       }
     });
