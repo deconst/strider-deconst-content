@@ -15,17 +15,15 @@ module.exports = {
         if (toolbelt.isPullRequest) {
           toolbelt.debug('Testing pull request %s.', toolbelt.pullRequestURL);
 
-          toolbelt.connectToDocker();
-          toolbelt.connectToGitHub();
-          toolbelt.connectToStagingPresenter();
-          toolbelt.connectToStagingContentService(true);
+          var dockerErr = toolbelt.connectToDocker();
+          if (hadError(dockerErr, done)) return;
+
+          optionalConnection(toolbelt.connectToStagingPresenter());
+          optionalConnection(toolbelt.connectToStagingContentService(true));
+          optionalConnection(toolbelt.connectToGitHub());
 
           entry.preparePullRequest(toolbelt, function (err, results) {
-            if (err) {
-              err.type = 'exitCode';
-              err.code = 1;
-            }
-
+            hadError(err);
             done(err, results.didSomething);
           })
         } else {
@@ -35,15 +33,12 @@ module.exports = {
 
       deploy: function (context, done) {
         var toolbelt = new Toolbelt(config, job, jobContext, phaseContext);
-        toolbelt.connectToDocker();
-        toolbelt.connectToGitHub();
+
+        var err = toolbelt.connectToDocker();
+        if (hadError(err, done)) return;
 
         entry.recursivelyPrepare(toolbelt, null, function (err, results) {
-          if (err) {
-            err.type = 'exitCode';
-            err.code = 1;
-          }
-
+          hadError(err);
           done(err, results.didSomething);
         })
       }
@@ -62,3 +57,20 @@ var makeWriter = function (context) {
     context.out(text);
   };
 };
+
+// Post-process any Errors from lower-level functions to trick Strider into using them to fail
+// the build rather than error it out.
+var hadError = function (err, done) {
+  if (err) {
+    err.type = 'exitCode';
+    err.code = 1;
+    if (done) done(err);
+    return true;
+  }
+
+  return false;
+}
+
+var optionalConnection = function (toolbelt, err) {
+  if (err) toolbelt.error(err.message);
+}
