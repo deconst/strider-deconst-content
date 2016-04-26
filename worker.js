@@ -14,8 +14,10 @@ module.exports = {
         var toolbelt = new Toolbelt(config, job, jobContext, phaseContext);
         if (toolbelt.isPullRequest) {
           toolbelt.debug('Testing pull request %s.', toolbelt.pullRequestURL);
+
           toolbelt.connectToDocker();
           toolbelt.connectToGitHub();
+          toolbelt.connectToStagingPresenter();
           toolbelt.connectToStagingContentService(true);
 
           entry.preparePullRequest(toolbelt, function (err, results) {
