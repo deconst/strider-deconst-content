@@ -31,7 +31,7 @@ module.exports = {
         }
       },
 
-      deploy: function (context, done) {
+      deploy: function (phaseContext, done) {
         var toolbelt = new Toolbelt(config, job, jobContext, phaseContext);
 
         var err = toolbelt.connectToDocker();
