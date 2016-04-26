@@ -15,6 +15,8 @@ module.exports = {
         if (toolbelt.isPullRequest) {
           toolbelt.debug('Testing pull request %s.', toolbelt.pullRequestURL);
           toolbelt.connectToDocker();
+          toolbelt.connectToGitHub();
+          toolbelt.connectToStagingContentService(true);
 
           entry.preparePullRequest(toolbelt, function (err, results) {
             if (err) {
@@ -32,6 +34,7 @@ module.exports = {
       deploy: function (context, done) {
         var toolbelt = new Toolbelt(config, job, jobContext, phaseContext);
         toolbelt.connectToDocker();
+        toolbelt.connectToGitHub();
 
         entry.recursivelyPrepare(toolbelt, null, function (err, results) {
           if (err) {
