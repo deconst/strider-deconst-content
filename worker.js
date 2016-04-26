@@ -27,7 +27,7 @@ module.exports = {
             done(err, results.didSomething);
           })
         } else {
-          done(null, false);
+          done(null, true);
         }
       },
 
