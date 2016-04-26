@@ -37,7 +37,12 @@ module.exports = {
         var err = toolbelt.connectToDocker();
         if (hadError(err, done)) return;
 
-        entry.recursivelyPrepare(toolbelt, null, function (err, results) {
+        var opts = {
+          contentServiceURL: config.contentServiceURL,
+          contentServiceAPIKey: config.contentServiceAPIKey
+        };
+
+        entry.recursivelyPrepare(toolbelt, opts, function (err, results) {
           hadError(err);
           done(err, results.didSomething);
         })
