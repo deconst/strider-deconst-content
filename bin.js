@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
-var logging = require('./lib/logger');
+var util = require('util');
 var entry = require('./lib/entry');
 
-var opts = {
-  root: ".",
-  say: logging.say,
-  whisper: logging.whisper
+var toolbelt = {
+  workspacePath: function () { return '.' }
+
+  info: console.log,
+  debug: console.log,
+  error: console.error
 };
 
-entry.recursivelyPrepare(opts, function (err) {
+entry.recursivelyPrepare(toolbelt, null, function (err) {
   if (err) {
     logging.logger.error("Preparation unsuccessful.", err);
 

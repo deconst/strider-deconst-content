@@ -1,53 +1,55 @@
-var path = require('path');
 var util = require('util');
+
+var Toolbelt = require('strider-deconst-common').Toolbelt;
 
 var entry = require('./lib/entry');
 
 module.exports = {
-  init: function (config, job, context, callback) {
-    var isPullRequest = job.trigger.type === 'pull-request';
-
+  init: function (config, job, jobContext, callback) {
     callback(null, {
       env: {},
       path: [],
 
-      test: function (context, done) {
-        if (isPullRequest) {
-          var opts = assembleOptions(config, context);
+      test: function (phaseContext, done) {
+        var toolbelt = new Toolbelt(config, job, jobContext, phaseContext);
+        if (toolbelt.isPullRequest) {
+          toolbelt.debug('Testing pull request %s.', toolbelt.pullRequestURL);
 
-          opts.pullRequestURL = job.trigger.url;
-          opts.user = job.project.creator;
+          var dockerErr = toolbelt.connectToDocker();
+          if (hadError(dockerErr, done)) return;
 
-          opts.whisper('Testing pull request [%s].', opts.pullRequestURL);
+          optionalConnection(toolbelt.connectToStagingPresenter());
+          optionalConnection(toolbelt.connectToStagingContentService(true));
+          optionalConnection(toolbelt.connectToGitHub());
 
-          entry.preparePullRequest(opts, function (err, results) {
-            if (err) {
-              err.type = 'exitCode';
-              err.code = 1;
-            }
-
-            done(null, results.didSomething);
-          });
+          entry.preparePullRequest(toolbelt, function (err, results) {
+            hadError(err);
+            done(err, results.didSomething);
+          })
         } else {
-          done(null, false);
+          done(null, true);
         }
       },
 
-      deploy: function (context, done) {
-        var opts = assembleOptions(config, context);
+      deploy: function (phaseContext, done) {
+        var toolbelt = new Toolbelt(config, job, jobContext, phaseContext);
 
-        entry.recursivelyPrepare(opts, function (err, results) {
-          if (err) {
-            err.type = 'exitCode';
-            err.code = 1;
-          }
+        var err = toolbelt.connectToDocker();
+        if (hadError(err, done)) return;
 
+        var opts = {
+          contentServiceURL: config.contentServiceURL,
+          contentServiceAPIKey: config.contentServiceAPIKey
+        };
+
+        entry.recursivelyPrepare(toolbelt, opts, function (err, results) {
+          hadError(err);
           done(err, results.didSomething);
-        });
+        })
       }
-    });
+    })
   }
-};
+}
 
 var makeWriter = function (context) {
   return function () {
@@ -61,25 +63,19 @@ var makeWriter = function (context) {
   };
 };
 
-var assembleOptions = function (config, context) {
-  var write = makeWriter(context);
-
-  var opts = {
-    root: context.dataDir,
-    dataContainer: process.env.STRIDER_WORKSPACE_CONTAINER,
-    contentServiceURL: config.contentServiceURL,
-    contentServiceAPIKey: config.contentServiceAPIKey,
-    contentServiceTLSVerify: config.contentServiceTLSVerify,
-    stagingPresenterURL: config.stagingPresenterURL,
-    stagingContentServiceURL: config.stagingContentServiceURL,
-    stagingContentServiceAdminAPIKey: config.stagingContentServiceAdminAPIKey,
-    say: write,
-    whisper: function () {}
-  };
-
-  if (config.verbose) {
-    opts.whisper = write;
+// Post-process any Errors from lower-level functions to trick Strider into using them to fail
+// the build rather than error it out.
+var hadError = function (err, done) {
+  if (err) {
+    err.type = 'exitCode';
+    err.code = 1;
+    if (done) done(err);
+    return true;
   }
 
-  return opts;
+  return false;
+}
+
+var optionalConnection = function (toolbelt, err) {
+  if (err) toolbelt.error(err.message);
 }
