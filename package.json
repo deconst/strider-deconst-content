@@ -4,6 +4,7 @@
   "description": "Universal Deconst content service build for Strider CD",
   "main": "index.js",
   "scripts": {
+    "format": "standard",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,5 +34,8 @@
     "webapp": "webapp.js",
     "worker": "worker.js",
     "icon": "icon.png"
+  },
+  "devDependencies": {
+    "standard": "^6.0.8"
   }
 }
