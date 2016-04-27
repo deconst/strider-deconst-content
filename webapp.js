@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
   config: {
     contentServiceURL: {
@@ -24,4 +26,4 @@ module.exports = {
       default: false
     }
   }
-};
+}
