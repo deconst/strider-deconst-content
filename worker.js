@@ -1,3 +1,5 @@
+'use strict'
+
 var Toolbelt = require('strider-deconst-common').Toolbelt
 
 var entry = require('./lib/entry')

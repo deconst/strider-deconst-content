@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict'
 
 var entry = require('./lib/entry')
 
