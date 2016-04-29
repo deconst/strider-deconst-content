@@ -11,6 +11,7 @@ module.exports = MockDocker
 
 MockDocker.prototype.runContainer = function (options, callback) {
   const current = this.expected.shift()
+  expect(current).not.to.be.undefined()
   expect(options).to.deep.equal(current.options)
 
   process.nextTick(() => callback(null, { status: current.statusCode }))

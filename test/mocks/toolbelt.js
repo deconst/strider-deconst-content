@@ -1,6 +1,7 @@
 'use strict'
 
 const util = require('util')
+const path = require('path')
 const chai = require('chai')
 const fail = chai.assert.fail
 
@@ -11,6 +12,7 @@ function MockToolbelt (options) {
 
   this.workspaceContainerName = options.workspaceContainerName
   this.config = options.config || {}
+  this.contentRoot = options.contentRoot
 
   this.shouldOutput = (process.env.VERBOSE || '') !== ''
   this.shouldError = options.shouldError
@@ -20,6 +22,16 @@ module.exports = MockToolbelt
 
 MockToolbelt.prototype.workspaceContainer = function () {
   return this.workspaceContainerName
+}
+
+MockToolbelt.prototype.workspacePath = function (p) {
+  return path.join(this.contentRoot, p || '')
+}
+
+MockToolbelt.prototype.debug = function () {
+  if (this.shouldOutput) {
+    console.log(util.format(arguments))
+  }
 }
 
 MockToolbelt.prototype.info = function () {
