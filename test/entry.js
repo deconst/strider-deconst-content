@@ -81,4 +81,46 @@ describe('recursivelyPrepare', function () {
       done()
     })
   })
+
+  it('reports when nothing was submitted', function (done) {
+    const toolbelt = new MockToolbelt({
+      config: { verbose: false },
+      contentRoot: path.join(__dirname, 'fixtures', 'jekyllish')
+    })
+
+    const jekyllish = path.join(__dirname, 'fixtures', 'jekyllish')
+    toolbelt.docker.expectRunContainer(expectedPreparerOpts(jekyllish, 'jekyll', 'https://github.com/some/repo/'), 0)
+    toolbelt.docker.expectRunContainer(expectedSubmitterOpts(jekyllish, 'https://github.com/some/repo/'), 2)
+
+    entry.recursivelyPrepare(toolbelt, opts, (err, result) => {
+      expect(err).to.be.null()
+
+      expect(result).to.deep.equal({
+        didSomething: true,
+        submittedSomething: false,
+        contentIDMap: {}
+      })
+
+      done()
+    })
+  })
+
+  it('reports when no content is found', function (done) {
+    const toolbelt = new MockToolbelt({
+      config: { verbose: false },
+      contentRoot: path.join(__dirname, 'fixtures', 'unknown')
+    })
+
+    entry.recursivelyPrepare(toolbelt, opts, (err, result) => {
+      expect(err).to.be.null()
+
+      expect(result).to.deep.equal({
+        didSomething: false,
+        submittedSomething: false,
+        contentIDMap: {}
+      })
+
+      done()
+    })
+  })
 })
