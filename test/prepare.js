@@ -5,24 +5,18 @@ const chai = require('chai')
 const dirtyChai = require('dirty-chai')
 chai.use(dirtyChai)
 const expect = chai.expect
-const fail = chai.assert.fail
 
-const util = require('util')
 const path = require('path')
-const MockDocker = require('./mocks/docker')
+const MockToolbelt = require('./mocks/toolbelt')
 const prepare = require('../lib/prepare')
 
 const jekyllishRoot = path.join(__dirname, 'fixtures', 'jekyllish')
 
 describe('prepare', function () {
-  it('Invokes the inferred preparer and submitter on the content root', function (done) {
-    const toolbelt = {
-      workspaceContainer: () => null,
-      docker: new MockDocker(),
-      config: { verbose: false },
-      info: () => null,
-      error: function () { fail('', '', util.format.apply(null, arguments)) }
-    }
+  it('invokes the inferred preparer and submitter on the content root', function (done) {
+    const toolbelt = new MockToolbelt({
+      config: { verbose: false }
+    })
 
     const opts = {
       contentRoot: jekyllishRoot,
