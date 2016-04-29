@@ -99,4 +99,28 @@ describe('prepare', function () {
       done()
     })
   })
+
+  it('yields an error when the submitter has an arbitrary exit status', function (done) {
+    const toolbelt = new MockToolbelt({
+      config: { verbose: false },
+      shouldError: true
+    })
+
+    runPrepare(toolbelt, 0, 128, (err, result) => {
+      expect(err.message).to.equal('Submitter exited with an error status 128')
+      done()
+    })
+  })
+
+  it('yields an error when the preparer exits with an error', function (done) {
+    const toolbelt = new MockToolbelt({
+      config: { verbose: false },
+      shouldError: true
+    })
+
+    runPrepare(toolbelt, 1, 0, (err, result) => {
+      expect(err.message).to.equal('Preparer exited with an error status 1')
+      done()
+    })
+  })
 })
