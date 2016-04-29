@@ -2,6 +2,7 @@
 
 const chai = require('chai')
 const expect = chai.expect
+const _ = require('lodash')
 
 function MockDocker () {
   this.expected = []
@@ -10,9 +11,8 @@ function MockDocker () {
 module.exports = MockDocker
 
 MockDocker.prototype.runContainer = function (options, callback) {
-  const current = this.expected.shift()
+  const current = this.expected.find((each) => _.isEqual(each.options, options))
   expect(current).not.to.be.undefined()
-  expect(options).to.deep.equal(current.options)
 
   process.nextTick(() => callback(null, { status: current.statusCode }))
 }
