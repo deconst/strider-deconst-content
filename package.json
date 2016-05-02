@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "standard",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha && npm run format"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,11 @@
     "icon": "icon.png"
   },
   "devDependencies": {
-    "standard": "^6.0.8"
+    "chai": "3.5.0",
+    "dirty-chai": "1.2.2",
+    "lodash": "4.11.1",
+    "mocha": "2.4.5",
+    "nock": "8.0.0",
+    "standard": "6.0.8"
   }
 }
