@@ -73,6 +73,65 @@ describe('prepare', function () {
     })
   })
 
+  it('injects the revisionID into the content ID if present', function (done) {
+    const toolbelt = new MockToolbelt({
+      config: { verbose: false }
+    })
+
+    const opts = {
+      contentRoot: jekyllishRoot,
+      contentServiceURL: 'https://localhost:9000/',
+      contentServiceAPIKey: '12341234',
+      revisionID: 'revision-id'
+    }
+
+    const preparerOpts = {
+      Image: 'quay.io/deconst/preparer-jekyll',
+      Env: [
+        'ENVELOPE_DIR=/usr/content-repo/_deconst/envelopes',
+        'ASSET_DIR=/usr/content-repo/_deconst/assets',
+        'CONTENT_ID_BASE=https://github.com/revision-id/some/repo/',
+        'VERBOSE='
+      ],
+      workspace: {
+        root: jekyllishRoot,
+        rootEnvVar: 'CONTENT_ROOT',
+        containerRoot: '/usr/content-repo'
+      }
+    }
+
+    const submitterOpts = {
+      Image: 'quay.io/deconst/submitter',
+      Env: [
+        'CONTENT_SERVICE_URL=https://localhost:9000/',
+        'CONTENT_SERVICE_APIKEY=12341234',
+        'ENVELOPE_DIR=/usr/content-repo/_deconst/envelopes',
+        'ASSET_DIR=/usr/content-repo/_deconst/assets',
+        'CONTENT_ID_BASE=https://github.com/revision-id/some/repo/',
+        'VERBOSE='
+      ],
+      workspace: {
+        root: jekyllishRoot,
+        rootEnvVar: 'CONTENT_ROOT',
+        containerRoot: '/usr/content-repo'
+      }
+    }
+
+    toolbelt.docker.expectRunContainer(preparerOpts, 0)
+    toolbelt.docker.expectRunContainer(submitterOpts, 0)
+
+    prepare.prepare(toolbelt, opts, (err, result) => {
+      expect(err).to.be.null()
+      expect(result).to.deep.equal({
+        contentIDBase: 'https://github.com/revision-id/some/repo/',
+        success: true,
+        didSomething: true
+      })
+
+      done()
+    })
+  })
+
   it('returns didSomething false when nothing was submitted', function (done) {
     const toolbelt = new MockToolbelt({ config: { verbose: false } })
 
