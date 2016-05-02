@@ -2,7 +2,7 @@
 
 var Toolbelt = require('strider-deconst-common').Toolbelt
 
-var entry = require('./lib/entry')
+var build = require('./lib')
 
 module.exports = {
   init: function (config, job, jobContext, callback) {
@@ -22,7 +22,7 @@ module.exports = {
           optionalConnection(toolbelt.connectToStagingContentService(true))
           optionalConnection(toolbelt.connectToGitHub())
 
-          entry.preparePullRequest(toolbelt, function (err, results) {
+          build.preparePullRequest(toolbelt, function (err, results) {
             hadError(err)
             done(err, results.didSomething)
           })
@@ -42,7 +42,7 @@ module.exports = {
           contentServiceAPIKey: config.contentServiceAPIKey
         }
 
-        entry.recursivelyPrepare(toolbelt, opts, function (err, results) {
+        build.recursivelyPrepare(toolbelt, opts, function (err, results) {
           hadError(err)
           done(err, results.didSomething)
         })
