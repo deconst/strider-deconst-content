@@ -8,7 +8,7 @@ const expect = chai.expect
 const path = require('path')
 
 const MockToolbelt = require('./mocks/toolbelt')
-const entry = require('../lib/entry')
+const build = require('../lib')
 
 describe('recursivelyPrepare', function () {
   const opts = {
@@ -66,7 +66,7 @@ describe('recursivelyPrepare', function () {
     toolbelt.docker.expectRunContainer(expectedPreparerOpts(jekyllish, 'jekyll', 'https://github.com/some/repo/'), 0)
     toolbelt.docker.expectRunContainer(expectedSubmitterOpts(jekyllish, 'https://github.com/some/repo/'), 0)
 
-    entry.recursivelyPrepare(toolbelt, opts, (err, result) => {
+    build.recursivelyPrepare(toolbelt, opts, (err, result) => {
       expect(err).to.be.null()
 
       expect(result).to.deep.equal({
@@ -92,7 +92,7 @@ describe('recursivelyPrepare', function () {
     toolbelt.docker.expectRunContainer(expectedPreparerOpts(jekyllish, 'jekyll', 'https://github.com/some/repo/'), 0)
     toolbelt.docker.expectRunContainer(expectedSubmitterOpts(jekyllish, 'https://github.com/some/repo/'), 2)
 
-    entry.recursivelyPrepare(toolbelt, opts, (err, result) => {
+    build.recursivelyPrepare(toolbelt, opts, (err, result) => {
       expect(err).to.be.null()
 
       expect(result).to.deep.equal({
@@ -111,7 +111,7 @@ describe('recursivelyPrepare', function () {
       contentRoot: path.join(__dirname, 'fixtures', 'unknown')
     })
 
-    entry.recursivelyPrepare(toolbelt, opts, (err, result) => {
+    build.recursivelyPrepare(toolbelt, opts, (err, result) => {
       expect(err).to.be.null()
 
       expect(result).to.deep.equal({
@@ -182,7 +182,7 @@ describe('preparePullRequest', function () {
     toolbelt.github.expectPostComment('some/repo', '123',
       /\[[^\]]+\]\(https:\/\/staging\.nope\.horse\/build-1111111111\/a\/path\/\)/)
 
-    entry.preparePullRequest(toolbelt, (err, result) => {
+    build.preparePullRequest(toolbelt, (err, result) => {
       expect(err).to.be.null()
       expect(result.didSomething).to.be.true()
 
@@ -236,7 +236,7 @@ describe('preparePullRequest', function () {
       }
     }, 2)
 
-    entry.preparePullRequest(toolbelt, (err, result) => {
+    build.preparePullRequest(toolbelt, (err, result) => {
       expect(err).to.be.null()
       expect(result.didSomething).to.be.true()
 
