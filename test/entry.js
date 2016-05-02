@@ -124,3 +124,71 @@ describe('recursivelyPrepare', function () {
     })
   })
 })
+
+describe('preparePullRequest', function () {
+  it('invokes the preparer chain with a revision ID and a transient key', function (done) {
+    const toolbelt = new MockToolbelt({
+      config: {
+        verbose: false,
+        mockGitSHA: '1111111111',
+        stagingContentServiceURL: 'https://content.staging.nope.horse',
+        stagingPresenterURL: 'https://staging.nope.horse'
+      },
+      contentRoot: path.join(__dirname, 'fixtures', 'jekyllish'),
+      pullRequestURL: 'https://github.com/some/repo/pull/123'
+    })
+
+    toolbelt.stagingContentService.expectKeyIssuance('temporary-build-1111111111', '1234567890')
+    toolbelt.stagingContentService.expectKeyRevocation('1234567890')
+
+    const jekyllish = path.join(__dirname, 'fixtures', 'jekyllish')
+    toolbelt.docker.expectRunContainer({
+      Image: 'quay.io/deconst/preparer-jekyll',
+      Env: [
+        'ENVELOPE_DIR=/usr/content-repo/_deconst/envelopes',
+        'ASSET_DIR=/usr/content-repo/_deconst/assets',
+        'CONTENT_ID_BASE=https://github.com/build-1111111111/some/repo/',
+        'VERBOSE='
+      ],
+      workspace: {
+        root: jekyllish,
+        rootEnvVar: 'CONTENT_ROOT',
+        containerRoot: '/usr/content-repo'
+      }
+    }, 0)
+    toolbelt.docker.expectRunContainer({
+      Image: 'quay.io/deconst/submitter',
+      Env: [
+        'CONTENT_SERVICE_URL=https://content.staging.nope.horse',
+        'CONTENT_SERVICE_APIKEY=1234567890',
+        'ENVELOPE_DIR=/usr/content-repo/_deconst/envelopes',
+        'ASSET_DIR=/usr/content-repo/_deconst/assets',
+        'CONTENT_ID_BASE=https://github.com/build-1111111111/some/repo/',
+        'VERBOSE='
+      ],
+      workspace: {
+        root: jekyllish,
+        rootEnvVar: 'CONTENT_ROOT',
+        containerRoot: '/usr/content-repo'
+      }
+    }, 0)
+
+    toolbelt.stagingPresenter.expectWhereis(
+      'https://github.com/build-1111111111/some/repo/',
+      '/build-1111111111/a/path/')
+
+    // Ensure that the GitHub comment contains a Markdown link to the presented URL:
+    // https://staging.nope.horse/build-1111111111/a/path/
+    toolbelt.github.expectPostComment('some/repo', '123',
+      /\[[^\]]+\]\(https:\/\/staging\.nope\.horse\/build-1111111111\/a\/path\/\)/)
+
+    entry.preparePullRequest(toolbelt, (err, result) => {
+      expect(err).to.be.null()
+      expect(result.didSomething).to.be.true()
+
+      done()
+    })
+  })
+
+  it('omits the GitHub preview comment if nothing was prepareed')
+})
