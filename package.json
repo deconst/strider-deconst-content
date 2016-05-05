@@ -1,6 +1,6 @@
 {
   "name": "strider-deconst-content",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Universal Deconst content service build for Strider CD",
   "main": "index.js",
   "scripts": {
