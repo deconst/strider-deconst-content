@@ -24,7 +24,7 @@ module.exports = {
 
           build.preparePullRequest(toolbelt, function (err, results) {
             hadError(err)
-            done(err, results.didSomething)
+            done(err, results ? results.didSomething : true)
           })
         } else {
           done(null, true)
